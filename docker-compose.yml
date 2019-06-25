@@ -1,0 +1,44 @@
+version: "3.3"
+
+services:
+  revive-adserver:
+    build: .
+    image: authomedia/revive-adserver:latest
+    ports:
+      - 5000:80
+    depends_on:
+      - database
+    volumes:
+       - revive-adserver-1:/var/www/html
+
+  revive-adserver-2:
+    build: .
+    image: authomedia/revive-adserver:latest
+    ports:
+      - 5001:80
+    depends_on:
+      - database
+    volumes:
+       - revive-adserver-2:/var/www/html
+
+  database:
+    image: mysql:5.7
+    command: --default-authentication-plugin=mysql_native_password --explicit_defaults_for_timestamp --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: "Vs9tpFSSKMZQ8Rvg"
+    volumes:
+       - db-data:/var/lib/mysql/data
+
+  adminer:
+    image: adminer
+    restart: always
+    ports:
+      - 8080:8080
+    depends_on:
+      - database
+
+volumes:
+  db-data:
+  revive-adserver-1:
+  revive-adserver-2:
